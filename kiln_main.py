@@ -12,15 +12,14 @@ def read_kiln():
     thermoTempC = max.readThermocoupleTemp()
     thermoTempF = (thermoTempC * 9.0/5.0) + 32
     kilntemp = (b'{0:3.1f}'.format(thermoTempF))
-    return
-
+    return(kilntemp)
 
 def sub_cb(topic, msg):
      #print(topic, msg)
   if topic == b'remote_io' and msg == b'sync':
-    thermoTempC = max.readThermocoupleTemp()
-    thermoTempF = (thermoTempC * 9.0/5.0) + 32
-    kilntemp = (b'{0:3.1f}'.format(thermoTempF))
+    #thermoTempC = max.readThermocoupleTemp()
+    #thermoTempF = (thermoTempC * 9.0/5.0) + 32
+    #kilntemp = (b'{0:3.1f}'.format(thermoTempF))
     #read_kiln()  
     #print(client_id)
     client.publish(topic_pub, kilntemp)
