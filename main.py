@@ -4,14 +4,8 @@ topic_sub = b'remote_io'
 topic_pub = b'temp_kiln'
 
 import max31856
-#csPin = 15
-#misoPin = 12
-#mosiPin = 13
-#  clkPin = 14
+
 max = max31856.max31856(csPin,misoPin,mosiPin,clkPin)
-#thermoTempC = max.readThermocoupleTemp()
-#thermoTempF = (thermoTempC * 9.0/5.0) + 32
-#kilntemp = (b'{0:3.1f}'.format(thermoTempF))
 
 def read_kiln():
     thermoTempC = max.readThermocoupleTemp()
@@ -20,13 +14,17 @@ def read_kiln():
     return(kilntemp)
  
 def sub_cb(topic, msg):
-     #print(topic, msg)
   if topic == b'remote_io' and msg == b'sync':
     kilntemp = read_kiln()  
-    print(client_id)
+    print('sync received')
     client.publish(topic_pub, kilntemp)
-    #client.publish(topic_mine, client_id)
     print(topic_pub, kilntemp)
+  if topic == b'remote_io' and msg == b'kiln on':
+    pin2.value(1)
+    print('kiln on')
+  if topic == b'remote_io' and msg == b'kiln off':
+    pin2.value(0)
+    print('kiln off')
     
 def connect_and_subscribe():
   global client_id, mqtt_server, topic_sub
@@ -51,15 +49,7 @@ except OSError as e:
 
 while True:
   try:
-    #kilntemp = read_kiln()
-    #print(kilntemp)
     new_message = client.check_msg()
-    #if new_message != 'None':
-    #thermoTempC = max.readThermocoupleTemp()
-    #thermoTempF = (thermoTempC * 9.0/5.0) + 32
-    #kilntemp = (b'{0:3.1f}'.format(thermoTempF))
-    #client.publish(topic_pub, kilntemp)
-    #print(topic_pub, kilntemp)
-    time.sleep(1)
+    time.sleep(2)
   except OSError as e:
     restart_and_reconnect()
